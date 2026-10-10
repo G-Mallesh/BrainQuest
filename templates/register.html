@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Register - BrainQuest Kids</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+<div class="register-container">
+
+    <div class="register-card">
+
+        <h1>🌟 BrainQuest Kids</h1>
+
+        <h2>Create Student Account 👦</h2>
+
+        {% with messages = get_flashed_messages() %}
+
+            {% if messages %}
+
+                <div class="messages">
+
+                    {% for message in messages %}
+
+                        <p>{{ message }}</p>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        {% endwith %}
+
+
+        <form method="POST"
+              action="{{ url_for('register') }}">
+
+
+            <!-- NAME -->
+
+            <label>Full Name</label>
+
+            <input
+                type="text"
+                name="full_name"
+                placeholder="Enter your full name"
+                required
+            >
+
+
+            <!-- EMAIL -->
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter your email"
+                required
+            >
+
+
+            <!-- PHONE -->
+
+            <label>Phone</label>
+
+            <input
+                type="tel"
+                name="phone"
+                placeholder="Enter phone number"
+            >
+
+
+            <!-- PASSWORD -->
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Create password"
+                minlength="6"
+                required
+            >
+
+
+            <!-- EDUCATION LEVEL -->
+
+            <label>Education Level</label>
+
+            <select
+                name="education_level"
+                id="education_level"
+                required
+            >
+
+                <option value="">
+                    Select Education Level
+                </option>
+
+                <option value="primary">
+                    Primary
+                </option>
+
+                <option value="middle">
+                    Middle School
+                </option>
+
+                <option value="secondary">
+                    Secondary
+                </option>
+
+            </select>
+
+
+            <!-- CLASS -->
+
+            <label>Select Class</label>
+
+            <select
+                name="class_id"
+                id="class_id"
+                required
+            >
+
+                <option value="">
+                    First select education level
+                </option>
+
+            </select>
+
+
+            <button type="submit">
+                🚀 Create Account
+            </button>
+
+        </form>
+
+
+        <p class="login-link">
+
+            Already have an account?
+
+            <a href="{{ url_for('login') }}">
+                Login
+            </a>
+
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const allClasses = {{ classes | tojson }};
+
+const educationLevel =
+    document.getElementById("education_level");
+
+const classSelect =
+    document.getElementById("class_id");
+
+
+educationLevel.addEventListener("change", function () {
+
+    const selectedLevel = this.value;
+
+    classSelect.innerHTML =
+        '<option value="">Select Class</option>';
+
+
+    if (!selectedLevel) {
+
+        classSelect.innerHTML =
+            '<option value="">First select education level</option>';
+
+        return;
+    }
+
+
+    const filteredClasses =
+        allClasses.filter(function (item) {
+
+            return item.education_level === selectedLevel;
+
+        });
+
+
+    filteredClasses.forEach(function (item) {
+
+        const option =
+            document.createElement("option");
+
+        option.value = item.id;
+
+        option.textContent = item.class_name;
+
+        classSelect.appendChild(option);
+
+    });
+
+});
+
+</script>
+
+</body>
+
+</html>
